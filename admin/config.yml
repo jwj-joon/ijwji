@@ -64,6 +64,27 @@ collections:
                 hint: "연재하는 글이면 같은 작품끼리 같은 이름을 쓴다. 아니면 비워 둔다."
                 widget: string
                 required: false
+              - name: episode
+                label: 화 번호
+                hint: "연재 글의 몇 번째 화인지. 있으면 제목이 '작품명 1. 제목'으로 보이고, 글 머리에 번호·제목·부제가 세 줄로 쌓인다."
+                widget: number
+                value_type: int
+                required: false
+              - name: subtitle
+                label: 부제
+                hint: "제목 아래 작게 보이는 한 줄. 예: REDUCTION"
+                widget: string
+                required: false
+              - name: lead
+                label: 첫머리 한 줄
+                hint: "작품명과 제목 사이에 놓이는 문장. 보통 1화에만 쓴다."
+                widget: string
+                required: false
+              - name: after
+                label: 화 끝 안내
+                hint: "본문 끝에 작게 붙는 한 줄. 예: 2화는 다듬는 중입니다."
+                widget: string
+                required: false
               - name: place
                 label: 장소
                 hint: "사진 라벨의 둘째 줄. 예: 파리, 루브르 박물관. 모르면 비워 둔다."
@@ -106,6 +127,6 @@ collections:
                 required: false
               - name: body
                 label: 본문
-                hint: "빈 줄 하나로 문단을 나눈다. 마크다운은 쓰지 않는다."
+                hint: "빈 줄 하나로 문단을 나눈다. '<사용자> ~'로 시작하는 문단은 사람의 대화, '(AI) ☞'로 시작하면 기계의 대화로 보인다. 줄 앞에 '> '를 붙이면 화면 속 문구가 되고, 여러 줄이면 회색 상자에 담긴다."
                 widget: text
                 required: false

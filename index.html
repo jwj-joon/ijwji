@@ -182,10 +182,14 @@
       <article id="post" hidden>
         <!-- 글밭 책갈피: 읽은 만큼 여백의 씨앗 요정이 아래로 내려온다(style.css). -->
         <svg class="bookmark" viewBox="0 0 11 10" aria-hidden="true" focusable="false"><use href="#seed-s-dot"/></svg>
+        <!-- 연재 글이면 작품명과 첫머리 한 줄이 제목 위에 온다(조판본의 순서). -->
+        <p class="post-series" hidden></p>
+        <p class="post-lead" hidden></p>
         <h2 class="post-title" tabindex="-1"></h2>
         <p class="meta post-meta"></p>
         <div class="post-media"></div>
         <div class="post-body"></div>
+        <p class="post-after" hidden></p>
         <p class="post-back"><a href="#writing">목록으로</a></p>
       </article>
 

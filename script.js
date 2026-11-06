@@ -77,9 +77,26 @@ function imageEl(p) {
 function metaLine(p) {
   const meta = el("p", { className: "meta" });
   if (p.date) meta.append(timeEl(p.date));
-  if (p.series) meta.append(`${p.date ? " · " : ""}${p.series}`);
+  // 화 번호가 있는 연재 글은 작품명이 이미 제목 줄에 있으므로 다시 쓰지 않는다.
+  if (p.series && !p.episode) meta.append(`${p.date ? " · " : ""}${p.series}`);
   if (p.place) meta.append(`${meta.childNodes.length ? " · " : ""}${p.place}`);
   return meta;
+}
+
+/* 목록과 탭 제목에 쓰는 이름. 연재 글은 "너의 다음 질문 1. 환원"처럼 작품명과 화를 붙인다. */
+function fullTitle(p) {
+  if (!p.episode) return p.title;
+  return `${p.series ? `${p.series} ` : ""}${p.episode}. ${p.title}`;
+}
+
+/* 본문 문단의 목소리. 원고에 이미 있는 표시를 그대로 알아본다(「너의 다음 질문」 조판본).
+   "<사용자> ~"로 시작하면 사람의 대화, "(AI) ☞"로 시작하면 기계의 대화,
+   모든 줄이 ">"로 시작하면 화면 속 문구(">" 는 지우고 보인다). */
+function voiceOf(para) {
+  if (para.startsWith("<사용자>")) return "voice-user";
+  if (para.startsWith("(AI)")) return "voice-ai";
+  if (para.split("\n").every((line) => line.startsWith(">"))) return "voice-screen";
+  return "";
 }
 
 /* 도트 그림 하나를 <use> 로 가져온다. 장식이라 스크린리더는 읽지 않는다. */
@@ -161,7 +178,7 @@ function renderLists() {
       }
       const li = el("li");
       const link = el("a", { className: "post-link", href: `#p/${p.id}` });
-      link.append(el("span", { className: "post-label" }, p.title));
+      link.append(el("span", { className: "post-label" }, fullTitle(p)));
       li.append(link);
       li.append(metaLine(p));
       list.append(li);
@@ -169,8 +186,29 @@ function renderLists() {
   }
 }
 
+/* 값이 있으면 채워서 보이고, 없으면 숨긴다. */
+function fill(selector, text) {
+  const node = post.querySelector(selector);
+  node.textContent = text || "";
+  node.hidden = !text;
+}
+
 function showPost(p) {
-  post.querySelector(".post-title").textContent = p.title;
+  fill(".post-series", p.episode ? p.series : "");
+  fill(".post-lead", p.lead);
+  fill(".post-after", p.after);
+
+  // 연재 글의 제목은 조판본처럼 번호 / 제목 / 부제를 세 줄로 쌓는다.
+  const title = post.querySelector(".post-title");
+  title.replaceChildren();
+  if (p.episode || p.subtitle) {
+    // 줄 사이의 띄어쓰기는 화면에는 안 보이지만 스크린리더가 "1. 환원 REDUCTION"으로 끊어 읽게 한다.
+    if (p.episode) title.append(el("span", { className: "ep-no" }, `${p.episode}.`), " ");
+    title.append(el("span", { className: "ep-name" }, p.title));
+    if (p.subtitle) title.append(" ", el("span", { className: "ep-sub" }, p.subtitle));
+  } else {
+    title.textContent = p.title;
+  }
   post.querySelector(".post-meta").replaceChildren(...metaLine(p).childNodes);
 
   const media = post.querySelector(".post-media");
@@ -182,10 +220,11 @@ function showPost(p) {
   const paragraphs = String(p.body || "").replace(/\r\n/g, "\n").split(/\n\s*\n/);
   for (const para of paragraphs) {
     if (!para.trim()) continue;
-    const pEl = el("p");
-    para.split("\n").forEach((line, i) => {
+    const voice = voiceOf(para.trim());
+    const pEl = el("p", voice ? { className: voice } : {});
+    para.trim().split("\n").forEach((line, i) => {
       if (i > 0) pEl.append(el("br"));
-      pEl.append(line);
+      pEl.append(voice === "voice-screen" ? line.replace(/^>\s?/, "") : line);
     });
     body.append(pEl);
   }
@@ -196,7 +235,7 @@ function showPost(p) {
 
   post.dataset.kind = p.kind;
   showOnly(post);
-  document.title = `${p.title} — ${SITE_NAME}`;
+  document.title = `${fullTitle(p)} — ${SITE_NAME}`;
   markCurrent(KIND_VIEW[p.kind]);
   window.scrollTo(0, 0);
   post.querySelector(".post-title").focus();
