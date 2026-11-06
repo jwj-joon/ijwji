@@ -3,11 +3,10 @@
 
 backend:
   name: github
-  # 배포 전에 실제 GitHub 저장소로 바꾼다. 예: 사용자명/저장소이름
-  # 지금은 GitHub 원격 저장소가 없어서 비워 둘 수 없으니 자리만 잡아 둔다.
+  # 이 폴더의 git 원격 저장소(origin)와 같은 값이다.
   # 로컬에서는 크롬/엣지로 /admin/ 을 열고 "로컬 저장소로 작업"을 고르면
   # 이 값과 상관없이 이 폴더에 바로 저장된다.
-  repo: OWNER/REPO
+  repo: jwj-joon/ijwji
   branch: main
   # Cloudflare Pages 에서 "GitHub로 로그인"을 쓰려면 인증 워커가 필요하다.
   # (sveltia-cms-auth) 배포 후 아래 주석을 풀고 워커 주소를 넣는다.
@@ -36,7 +35,7 @@ collections:
                 label: 분류
                 widget: select
                 options:
-                  - { label: 소설, value: novel }
+                  - { label: 글밭(소설·에세이), value: writing }
                   - { label: 사진, value: photo }
                   - { label: 공부, value: note }
               - name: title
@@ -52,13 +51,41 @@ collections:
                 widget: datetime
                 format: YYYY-MM-DD
                 time_format: false
+                hint: "모르면 비워 둔다. 날짜 없는 글은 목록 맨 뒤에 놓인다."
+                required: false
+              - name: featured
+                label: 첫 화면에 걸기
+                hint: "켜면 첫 화면의 대표작으로 먼저 보인다(글밭·공부 3개, 사진 6장). 모자라면 최신 글로 채운다."
+                widget: boolean
+                default: false
+                required: false
               - name: series
                 label: 작품명
-                hint: "연재 소설이면 같은 작품끼리 같은 이름을 쓴다. 아니면 비워 둔다."
+                hint: "연재하는 글이면 같은 작품끼리 같은 이름을 쓴다. 아니면 비워 둔다."
                 widget: string
                 required: false
+              - name: place
+                label: 장소
+                hint: "사진 라벨의 둘째 줄. 예: 파리, 루브르 박물관. 모르면 비워 둔다."
+                widget: string
+                required: false
+              - name: size
+                label: 걸 크기
+                hint: "사진 벽에 걸 크기. 크게 걸 사진을 사이사이 섞으면 벽에 리듬이 생긴다."
+                widget: select
+                default: m
+                required: false
+                options:
+                  - { label: 크게, value: l }
+                  - { label: 보통, value: m }
+                  - { label: 작게, value: s }
               - name: image
                 label: 이미지
+                widget: image
+                required: false
+              - name: image_small
+                label: 작은 이미지
+                hint: "사진 벽에 걸 긴 변 800px 사본. 비워 두면 큰 이미지를 그대로 쓴다(페이지가 무거워진다)."
                 widget: image
                 required: false
               - name: image_alt

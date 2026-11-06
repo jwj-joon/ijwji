@@ -3,3 +3,6 @@
 *.key
 .DS_Store
 Thumbs.db
+
+# 사진 원본. 내 컴퓨터에만 둔다. 사이트에는 images/ 의 줄인 사본만 올린다.
+originals/

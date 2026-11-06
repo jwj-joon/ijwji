@@ -8,7 +8,11 @@
 </head>
 <body>
   <!-- Sveltia CMS. 설정은 같은 폴더의 config.yml 을 읽는다.
-       AGENTS.md "Sveltia CMS 트랙"에 따라 admin/ 안에서만 CDN 스크립트를 쓴다. -->
-  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+       AGENTS.md "콘텐츠와 CMS"에 따라 admin/ 안에서만 CDN 스크립트를 쓴다.
+       버전을 고정한다(2026-11-06 기준 최신 0.261.0). 올릴 때는 주소의 버전과
+       integrity 값을 함께 바꾼다. integrity 는 받은 파일이 이 버전 그대로인지 브라우저가 검사하는 값이다. -->
+  <script src="https://unpkg.com/@sveltia/cms@0.261.0/dist/sveltia-cms.js"
+          integrity="sha384-sty7BGmg7YGd6Wi3G73SvUYWcNE6vztGSEklT7ZI8T/3JSshWKHKH7HuUk99s/HJ"
+          crossorigin="anonymous"></script>
 </body>
 </html>

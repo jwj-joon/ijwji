@@ -8,11 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>정원준의 블로그</title>
-  <meta name="description" content="정원준이 쓴 소설, 찍은 사진, 공부한 기록.">
+  <meta name="description" content="정원준이 쓴 글, 찍은 사진, 공부한 기록.">
   <meta name="author" content="정원준">
 
   <link rel="preload" href="fonts/Galmuri11.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
   <!-- Sveltia CMS 트랙: 글 목록은 content/posts.json 에 있고,
        script.js 가 그 파일을 읽어 아래 빈 목록을 채운다. -->
@@ -20,14 +21,9 @@
 </head>
 <body>
 
-  <!-- 첫 화면 커버. 글을 열면 script.js 가 숨긴다.
-       배경 그림(하늘·구름 양·산·풀밭)은 초안 확인용 샘플이다. 소재 사진이 생기면 교체한다.
-       씨앗은 배경에서 빼고 아래 SVG 로 얹어 전부 움직인다(2026-11-04 사용자 요청).
-       좌표 --x, --y, --w, --dx, --dy 는 배경 그림(384×128)의 픽셀 단위다. -->
-  <div class="cover">
-    <img src="images/sample-cover.png" alt="" width="384" height="128">
-
-    <svg class="sprites" width="0" height="0" aria-hidden="true" focusable="false">
+  <!-- 씨앗 요정 도트 그림 정의. 화면에 직접 그려지지 않고,
+       아래 갈림길·책갈피와 script.js 의 사진 벽이 <use> 로 가져다 쓴다. -->
+  <svg class="sprites" width="0" height="0" aria-hidden="true" focusable="false">
 <symbol id="seed-b-dot" viewBox="0 0 16 13"><path class="px-l" d="M0 3h3v1h-3zM1 5h1v1h-1z"/><path class="px-w" d="M7 0h1v1h-1zM10 0h1v1h-1zM13 0h1v1h-1zM6 1h1v1h-1zM8 1h5v1h-5zM14 1h1v1h-1zM5 2h1v1h-1zM7 2h7v1h-7zM15 2h1v1h-1zM6 3h9v1h-9zM5 4h3v1h-3zM9 4h3v1h-3zM13 4h3v1h-3zM6 5h9v1h-9zM8 6h5v1h-5z"/><path class="px-s" d="M7 6h1v1h-1zM13 6h1v1h-1zM9 7h3v1h-3z"/><path class="px-o" d="M8 7h1v1h-1zM12 7h1v1h-1z"/><path class="px-e" d="M8 4h1v1h-1zM12 4h1v1h-1z"/><path class="px-t" d="M10 8h1v1h-1zM9 9h1v1h-1zM9 10h1v1h-1zM8 11h1v1h-1z"/><path class="px-k" d="M7 12h2v1h-2z"/></symbol>
 <symbol id="seed-b-dot-blush" viewBox="0 0 16 13"><path class="px-l" d="M0 3h3v1h-3zM1 5h1v1h-1z"/><path class="px-w" d="M7 0h1v1h-1zM10 0h1v1h-1zM13 0h1v1h-1zM6 1h1v1h-1zM8 1h5v1h-5zM14 1h1v1h-1zM5 2h1v1h-1zM7 2h7v1h-7zM15 2h1v1h-1zM6 3h9v1h-9zM5 4h3v1h-3zM9 4h3v1h-3zM13 4h3v1h-3zM7 5h7v1h-7zM8 6h5v1h-5z"/><path class="px-s" d="M7 6h1v1h-1zM13 6h1v1h-1zM9 7h3v1h-3z"/><path class="px-o" d="M8 7h1v1h-1zM12 7h1v1h-1z"/><path class="px-e" d="M8 4h1v1h-1zM12 4h1v1h-1z"/><path class="px-b" d="M6 5h1v1h-1zM14 5h1v1h-1z"/><path class="px-t" d="M10 8h1v1h-1zM9 9h1v1h-1zM9 10h1v1h-1zM8 11h1v1h-1z"/><path class="px-k" d="M7 12h2v1h-2z"/></symbol>
 <symbol id="seed-b-squint" viewBox="0 0 16 13"><path class="px-l" d="M0 3h3v1h-3zM1 5h1v1h-1z"/><path class="px-w" d="M7 0h1v1h-1zM10 0h1v1h-1zM13 0h1v1h-1zM6 1h1v1h-1zM8 1h5v1h-5zM14 1h1v1h-1zM5 2h1v1h-1zM7 2h7v1h-7zM15 2h1v1h-1zM6 3h1v1h-1zM8 3h5v1h-5zM14 3h1v1h-1zM5 4h3v1h-3zM9 4h3v1h-3zM13 4h3v1h-3zM6 5h1v1h-1zM8 5h5v1h-5zM14 5h1v1h-1zM8 6h5v1h-5z"/><path class="px-s" d="M7 6h1v1h-1zM13 6h1v1h-1zM9 7h3v1h-3z"/><path class="px-o" d="M8 7h1v1h-1zM12 7h1v1h-1z"/><path class="px-e" d="M7 3h1v1h-1zM13 3h1v1h-1zM8 4h1v1h-1zM12 4h1v1h-1zM7 5h1v1h-1zM13 5h1v1h-1z"/><path class="px-t" d="M10 8h1v1h-1zM9 9h1v1h-1zM9 10h1v1h-1zM8 11h1v1h-1z"/><path class="px-k" d="M7 12h2v1h-2z"/></symbol>
@@ -44,33 +40,55 @@
 <symbol id="seed-s-sleep" viewBox="0 0 11 10"><path class="px-l" d="M0 2h2v1h-2zM0 4h1v1h-1z"/><path class="px-w" d="M5 0h1v1h-1zM7 0h1v1h-1zM9 0h1v1h-1zM4 1h1v1h-1zM6 1h3v1h-3zM10 1h1v1h-1zM5 2h5v1h-5zM4 3h1v1h-1zM7 3h1v1h-1zM10 3h1v1h-1zM6 4h3v1h-3z"/><path class="px-s" d="M5 4h1v1h-1zM9 4h1v1h-1zM7 5h1v1h-1z"/><path class="px-o" d="M6 5h1v1h-1zM8 5h1v1h-1z"/><path class="px-e" d="M5 3h2v1h-2zM8 3h2v1h-2z"/><path class="px-t" d="M7 6h1v1h-1zM6 7h1v1h-1zM6 8h1v1h-1z"/><path class="px-k" d="M5 9h2v1h-2z"/></symbol>
 <symbol id="seed-fluff" viewBox="0 0 4 3"><path class="px-w" d="M2 0h1v1h-1zM1 1h3v1h-3z"/><path class="px-s" d="M0 2h1v1h-1z"/></symbol>
 <symbol id="gust" viewBox="0 0 22 1"><path class="px-g" d="M0 0h5v1h-5zM7 0h10v1h-10zM19 0h3v1h-3z"/></symbol>
-    </svg>
+  </svg>
 
-    <div class="wind" aria-hidden="true">
-      <svg class="gust" viewBox="0 0 22 1" style="--x:10;--y:24;--w:22;--dx:140;--t:0.8;--d:-0.2"><use href="#gust"/></svg>
-      <svg class="gust" viewBox="0 0 22 1" style="--x:120;--y:50;--w:22;--dx:160;--t:1.0;--d:-0.6"><use href="#gust"/></svg>
-      <svg class="gust" viewBox="0 0 22 1" style="--x:60;--y:74;--w:22;--dx:150;--t:0.9;--d:-0.9"><use href="#gust"/></svg>
-      <svg class="seed" viewBox="0 0 16 13" style="--x:30;--y:58;--w:16;--dx:120;--dy:-22;--t:1.4;--d:-0.1"><use href="#seed-b-squint-blush"/></svg>
-      <svg class="seed" viewBox="0 0 11 10" style="--x:64;--y:82;--w:11;--dx:90;--dy:-14;--t:1.1;--d:-0.6"><use href="#seed-s-dot"/></svg>
-      <svg class="seed" viewBox="0 0 16 13" style="--x:100;--y:44;--w:16;--dx:130;--dy:-16;--t:1.6;--d:-0.35"><use href="#seed-b-smile-blush"/></svg>
-      <svg class="seed" viewBox="0 0 11 10" style="--x:146;--y:30;--w:11;--dx:100;--dy:-8;--t:1.2;--d:-0.8"><use href="#seed-s-sleep"/></svg>
-      <svg class="seed" viewBox="0 0 16 13" style="--x:168;--y:66;--w:16;--dx:110;--dy:-22;--t:1.3;--d:-0.5"><use href="#seed-b-wow"/></svg>
-      <svg class="seed" viewBox="0 0 16 13" style="--x:204;--y:38;--w:16;--dx:120;--dy:-12;--t:1.5;--d:-0.15"><use href="#seed-b-wink-blush"/></svg>
-      <svg class="seed" viewBox="0 0 11 10" style="--x:236;--y:76;--w:11;--dx:80;--dy:-18;--t:1.0;--d:-0.4"><use href="#seed-s-dot"/></svg>
-      <svg class="seed" viewBox="0 0 16 13" style="--x:246;--y:16;--w:16;--dx:100;--dy:-6;--t:1.35;--d:-0.7"><use href="#seed-b-squint"/></svg>
-      <svg class="seed" viewBox="0 0 4 3" style="--x:18;--y:28;--w:4;--dx:70;--dy:-6;--t:1.0;--d:-0.2"><use href="#seed-fluff"/></svg>
-      <svg class="seed" viewBox="0 0 4 3" style="--x:84;--y:18;--w:4;--dx:80;--dy:-4;--t:1.2;--d:-0.55"><use href="#seed-fluff"/></svg>
-      <svg class="seed" viewBox="0 0 4 3" style="--x:128;--y:86;--w:4;--dx:60;--dy:-10;--t:0.9;--d:-0.3"><use href="#seed-fluff"/></svg>
-      <svg class="seed" viewBox="0 0 4 3" style="--x:196;--y:12;--w:4;--dx:70;--dy:-4;--t:1.1;--d:-0.9"><use href="#seed-fluff"/></svg>
-      <svg class="seed" viewBox="0 0 4 3" style="--x:270;--y:52;--w:4;--dx:60;--dy:-8;--t:1.0;--d:-0.45"><use href="#seed-fluff"/></svg>
-      <svg class="seed" viewBox="0 0 4 3" style="--x:300;--y:82;--w:4;--dx:60;--dy:-12;--t:0.95;--d:-0.65"><use href="#seed-fluff"/></svg>
+  <!-- 배경 풍경. 사이트 맨 뒤에 고정된 도트 풍경이고, 글과 사진은 그 위에 걸린다
+       (2026-11-06 정원준 제안 "도트로 예전의 하늘하늘한 풍경을 가장 뒤편에").
+       그림은 images/scene-*.png 세 장이다: 하늘·먼 산·언덕(back), 구름(clouds), 앞 풀밭 6장면(meadow).
+       요정과 바람의 좌표 --x, --y, --w, --dx, --dy 는 풍경 그림(480×270)의 도트 단위다.
+       장식이라 스크린리더는 읽지 않는다. -->
+  <div class="scene" aria-hidden="true">
+    <div class="scene-back"></div>
+    <div class="scene-clouds"></div>
+    <div class="scene-meadow"></div>
+    <div class="scene-wind">
+      <!-- 민들레에서 막 떠난 요정들 -->
+      <svg class="flyer blinks" viewBox="0 0 11 10" style="--x:92;--y:138;--w:11;--dx:400;--dy:-72;--t:38s;--d:-2s;--f:3.2s"><g class="flutter"><use class="eye-open" href="#seed-s-dot"/><use class="eye-shut" href="#seed-s-sleep"/></g></svg>
+      <svg class="flyer blinks" viewBox="0 0 11 10" style="--x:97;--y:150;--w:11;--dx:380;--dy:-96;--t:30s;--d:-11s;--f:2.6s"><g class="flutter"><use class="eye-open" href="#seed-s-dot"/><use class="eye-shut" href="#seed-s-sleep"/></g></svg>
+      <svg class="flyer blinks" viewBox="0 0 11 10" style="--x:90;--y:144;--w:11;--dx:410;--dy:-44;--t:44s;--d:-24s;--f:3.8s"><g class="flutter"><use class="eye-open" href="#seed-s-dot"/><use class="eye-shut" href="#seed-s-sleep"/></g></svg>
+      <svg class="flyer blinks" viewBox="0 0 11 10" style="--x:95;--y:134;--w:11;--dx:390;--dy:-104;--t:35s;--d:-31s;--f:3.0s"><g class="flutter"><use class="eye-open" href="#seed-s-dot"/><use class="eye-shut" href="#seed-s-sleep"/></g></svg>
+      <!-- 멀리서부터 하늘을 건너오는 요정들. 큰 요정은 가장 높이 나는 하나뿐이다.
+           배경 요정이 크면 첫 화면 갈림길의 요정과 헷갈린다. -->
+      <svg class="flyer blinks" viewBox="0 0 11 10" style="--x:-20;--y:62;--w:11;--dx:520;--dy:-12;--t:52s;--d:-8s;--f:4.4s"><g class="flutter"><use class="eye-open" href="#seed-s-dot"/><use class="eye-shut" href="#seed-s-sleep"/></g></svg>
+      <svg class="flyer" viewBox="0 0 11 10" style="--x:-16;--y:100;--w:11;--dx:510;--dy:-30;--t:40s;--d:-19s;--f:3.4s"><g class="flutter"><use class="eye-open" href="#seed-s-sleep"/></g></svg>
+      <svg class="flyer blinks" viewBox="0 0 11 10" style="--x:-20;--y:118;--w:11;--dx:520;--dy:-50;--t:48s;--d:-40s;--f:3.6s"><g class="flutter"><use class="eye-open" href="#seed-s-dot"/><use class="eye-shut" href="#seed-s-sleep"/></g></svg>
+      <svg class="flyer blinks" viewBox="0 0 16 13" style="--x:-18;--y:26;--w:16;--dx:520;--dy:6;--t:58s;--d:-30s;--f:4.8s"><g class="flutter"><use class="eye-open" href="#seed-b-dot-blush"/><use class="eye-shut" href="#seed-b-sleep-blush"/></g></svg>
+      <!-- 솜털 -->
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:94;--y:157;--w:4;--dx:391;--dy:-128;--t:31s;--d:-22.9s;--f:2.9s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:86;--y:148;--w:4;--dx:363;--dy:-123;--t:18s;--d:-16.2s;--f:1.8s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:101;--y:141;--w:4;--dx:397;--dy:-109;--t:19s;--d:-10.9s;--f:1.6s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:92;--y:147;--w:4;--dx:371;--dy:-63;--t:31s;--d:-23.7s;--f:1.8s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:88;--y:138;--w:4;--dx:413;--dy:-56;--t:20s;--d:-0.0s;--f:2.8s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:92;--y:140;--w:4;--dx:342;--dy:-61;--t:22s;--d:-6.9s;--f:1.9s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:92;--y:139;--w:4;--dx:350;--dy:-89;--t:22s;--d:-0.5s;--f:2.2s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:90;--y:142;--w:4;--dx:316;--dy:-82;--t:22s;--d:-18.0s;--f:2.4s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:96;--y:136;--w:4;--dx:379;--dy:-85;--t:31s;--d:-9.5s;--f:2.6s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <svg class="flyer" viewBox="0 0 4 3" style="--x:91;--y:149;--w:4;--dx:420;--dy:-62;--t:18s;--d:-4.6s;--f:2.9s"><g class="flutter"><use class="eye-open" href="#seed-fluff"/></g></svg>
+      <!-- 바람 줄 -->
+      <svg class="gust" viewBox="0 0 22 1" style="--x:20;--y:58;--w:22;--dx:170;--t:9s;--d:-1s"><use href="#gust"/></svg>
+      <svg class="gust" viewBox="0 0 22 1" style="--x:150;--y:96;--w:22;--dx:190;--t:11s;--d:-6s"><use href="#gust"/></svg>
+      <svg class="gust" viewBox="0 0 22 1" style="--x:60;--y:128;--w:22;--dx:160;--t:8s;--d:-3.5s"><use href="#gust"/></svg>
+      <svg class="gust" viewBox="0 0 22 1" style="--x:260;--y:70;--w:22;--dx:180;--t:13s;--d:-9s"><use href="#gust"/></svg>
     </div>
-
-    <button class="wind-toggle" type="button" hidden>
-      <svg class="wind-toggle-icon" viewBox="0 0 11 10" aria-hidden="true" focusable="false"><use href="#seed-s-dot"/></svg>
-      <span class="wind-toggle-label">바람 멈추기</span>
-    </button>
   </div>
+
+  <!-- 바람 멈추기. 체크박스라서 JavaScript 가 없어도 동작한다.
+       script.js 는 고른 상태를 기억하는 일만 한다. -->
+  <label class="wind-toggle">
+    <input type="checkbox" id="wind-still">
+    <svg class="wind-toggle-icon" viewBox="0 0 11 10" aria-hidden="true" focusable="false"><use class="icon-awake" href="#seed-s-dot"/><use class="icon-asleep" href="#seed-s-sleep"/></svg>
+    <span>바람 멈추기</span>
+  </label>
 
   <div class="wrap">
 
@@ -78,7 +96,7 @@
       <h1 class="site-name"><a href="./">정원준의 블로그</a></h1>
       <nav aria-label="분류">
         <ul class="site-nav">
-          <li><a href="#novels">소설</a></li>
+          <li><a href="#writing">글밭</a></li>
           <li><a href="#photos">사진</a></li>
           <li><a href="#notes">공부</a></li>
           <li><a href="#about">소개</a></li>
@@ -88,46 +106,87 @@
 
     <main>
 
+      <!-- 첫 화면: 갈림길과, 갈래마다 대표작 몇 개.
+           근거: 2026-11-06 정원준 요청 "메인 화면이 길어지지 않게 대표로 몇 개만 보여 주고,
+           더 보고 싶으면 링크로 사진·글·공부·소개로 가게". 몇 개를 보일지는 data-show,
+           무엇을 보일지는 CMS 의 "첫 화면에 걸기"가 정한다(없으면 최신순). -->
       <div id="home">
-        <p class="lede">정원준이 쓴 소설, 찍은 사진, 공부한 기록.</p>
+        <p class="lede">정원준이 쓴 글, 찍은 사진, 공부한 기록.</p>
+
+        <!-- 첫 화면의 갈림길. 씨앗 요정 넷이 각자 한 곳을 맡는다(2026-11-06 정원준 제안
+             "씨앗요정을 시작으로 고를 수 있게"). 얼굴은 맡은 곳의 성격에서 골랐다:
+             글밭은 꿈꾸듯 잠든 얼굴, 사진은 눈이 동그래진 얼굴, 공부는 집중한 얼굴, 소개는 웃는 얼굴. -->
+        <nav class="choose" aria-label="둘러보기">
+          <ul>
+            <li><a href="#writing"><svg class="choose-seed" viewBox="0 0 16 13" aria-hidden="true" focusable="false"><use href="#seed-b-sleep-blush"/></svg><span>글밭</span></a></li>
+            <li><a href="#photos"><svg class="choose-seed" viewBox="0 0 16 13" aria-hidden="true" focusable="false"><use href="#seed-b-wow"/></svg><span>사진</span></a></li>
+            <li><a href="#notes"><svg class="choose-seed" viewBox="0 0 16 13" aria-hidden="true" focusable="false"><use href="#seed-b-squint"/></svg><span>공부</span></a></li>
+            <li><a href="#about"><svg class="choose-seed" viewBox="0 0 16 13" aria-hidden="true" focusable="false"><use href="#seed-b-smile-blush"/></svg><span>소개</span></a></li>
+          </ul>
+        </nav>
 
         <noscript>
-          <p class="meta">글 목록은 JavaScript가 켜져 있어야 보입니다.</p>
+          <p class="meta">글과 사진 목록은 JavaScript가 켜져 있어야 보입니다. 소개는 위의 "소개"에서 볼 수 있습니다.</p>
         </noscript>
 
-        <section id="novels" aria-labelledby="novels-title">
-          <h2 id="novels-title">소설</h2>
-          <ul class="post-list" data-kind="novel"></ul>
+        <!-- "모두 보기"는 그 갈래에 대표작보다 많은 글이 있을 때만 보인다(script.js). -->
+        <section class="preview" aria-labelledby="writing-preview-title">
+          <h2 id="writing-preview-title">글밭</h2>
+          <ul class="post-list" data-kind="writing" data-show="3"></ul>
+          <p class="more"><a href="#writing">글 모두 보기</a></p>
         </section>
 
-        <section id="photos" aria-labelledby="photos-title">
-          <h2 id="photos-title">사진</h2>
-          <ul class="post-list" data-kind="photo"></ul>
+        <section class="preview preview-photos" aria-labelledby="photos-preview-title">
+          <h2 id="photos-preview-title">사진</h2>
+          <!-- 사진 벽. script.js 가 사진을 액자에 넣어 건다. -->
+          <ul class="post-list wall" data-kind="photo" data-show="6"></ul>
+          <p class="more"><a href="#photos">사진 모두 보기</a></p>
         </section>
 
-        <section id="notes" aria-labelledby="notes-title">
-          <h2 id="notes-title">공부</h2>
-          <ul class="post-list" data-kind="note"></ul>
-        </section>
-
-        <!-- 소개. JavaScript 없이도 보이도록 HTML에 직접 쓴다.
-             채울 것(정원준): 무엇을 공부하는지, 어떤 소설을 쓰는지, 연락받을 곳(원할 때만).
-             확인되지 않은 내용은 지어 넣지 않았다. -->
-        <section id="about" aria-labelledby="about-title">
-          <h2 id="about-title">소개</h2>
-          <div class="about">
-            <p>정원준입니다. 소설을 쓰고, 사진을 찍고, 공부한 것을 기록합니다.</p>
-          </div>
+        <section class="preview" aria-labelledby="notes-preview-title">
+          <h2 id="notes-preview-title">공부</h2>
+          <ul class="post-list" data-kind="note" data-show="3"></ul>
+          <p class="more"><a href="#notes">공부 기록 모두 보기</a></p>
         </section>
       </div>
 
+      <!-- 갈래 화면. 주소 끝이 #writing, #photos, #notes, #about 일 때 그 하나만 보인다.
+           JavaScript 가 꺼져 있어도 :target 으로 열린다(style.css). -->
+      <section id="writing" class="view" aria-labelledby="writing-title" hidden>
+        <h2 id="writing-title" class="view-title" tabindex="-1">글밭</h2>
+        <p class="view-lede">소설과 에세이.</p>
+        <ul class="post-list" data-kind="writing"></ul>
+      </section>
+
+      <section id="photos" class="view" aria-labelledby="photos-title" hidden>
+        <h2 id="photos-title" class="view-title" tabindex="-1">사진</h2>
+        <ul class="post-list wall" data-kind="photo"></ul>
+      </section>
+
+      <section id="notes" class="view" aria-labelledby="notes-title" hidden>
+        <h2 id="notes-title" class="view-title" tabindex="-1">공부</h2>
+        <ul class="post-list" data-kind="note"></ul>
+      </section>
+
+      <!-- 소개. JavaScript 없이도 보이도록 HTML에 직접 쓴다.
+           채울 것(정원준): 무엇을 공부하는지, 어떤 글을 쓰는지, 연락받을 곳(원할 때만).
+           확인되지 않은 내용은 지어 넣지 않았다. -->
+      <section id="about" class="view" aria-labelledby="about-title" hidden>
+        <h2 id="about-title" class="view-title" tabindex="-1">소개</h2>
+        <div class="about">
+          <p>정원준입니다. 글을 쓰고, 사진을 찍고, 공부한 것을 기록합니다.</p>
+        </div>
+      </section>
+
       <!-- 글 하나를 열었을 때(#p/글-id) script.js 가 채운다. -->
       <article id="post" hidden>
+        <!-- 글밭 책갈피: 읽은 만큼 여백의 씨앗 요정이 아래로 내려온다(style.css). -->
+        <svg class="bookmark" viewBox="0 0 11 10" aria-hidden="true" focusable="false"><use href="#seed-s-dot"/></svg>
         <h2 class="post-title" tabindex="-1"></h2>
         <p class="meta post-meta"></p>
         <div class="post-media"></div>
         <div class="post-body"></div>
-        <p class="post-back"><a href="#novels">목록으로</a></p>
+        <p class="post-back"><a href="#writing">목록으로</a></p>
       </article>
 
     </main>
